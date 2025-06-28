@@ -1,0 +1,45 @@
+{
+  "task_description": "Sentiment analysis - classify text as positive, negative, or neutral",
+  "test_cases": [
+    {
+      "input": "I absolutely love this product! It exceeded all my expectations.",
+      "expected_output": "positive"
+    },
+    {
+      "input": "This is the worst purchase I've ever made. Complete waste of money.",
+      "expected_output": "negative"
+    },
+    {
+      "input": "The weather today is cloudy with a chance of rain.",
+      "expected_output": "neutral"
+    },
+    {
+      "input": "Amazing customer service! They went above and beyond to help me.",
+      "expected_output": "positive"
+    },
+    {
+      "input": "I'm really disappointed with the quality. It broke after one day.",
+      "expected_output": "negative"
+    },
+    {
+      "input": "The meeting is scheduled for 3 PM in conference room B.",
+      "expected_output": "neutral"
+    },
+    {
+      "input": "This book changed my life! Highly recommend it to everyone.",
+      "expected_output": "positive"
+    },
+    {
+      "input": "Terrible experience. The staff was rude and unhelpful.",
+      "expected_output": "negative"
+    },
+    {
+      "input": "The report contains data from the last quarter.",
+      "expected_output": "neutral"
+    },
+    {
+      "input": "Outstanding performance! This tool saves me hours every week.",
+      "expected_output": "positive"
+    }
+  ]
+}

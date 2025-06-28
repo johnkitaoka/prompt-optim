@@ -1,6 +1,6 @@
-# LLM Prompt Optimizer (<150 Lines of Code)
+# LLM Prompt Optimizer
 
-Automatically improves prompts through iterative testing and refinement using the Anthropic Claude API.
+Automatically improves prompts through iterative testing and refinement, in under 100 lines of code.
 
 ## 🚀 Features
 
@@ -37,7 +37,7 @@ Execute → Evaluate → Analyze → Refine → Repeat until target accuracy rea
 ## 📁 Files
 
 - `main.py` - CLI interface
-- `optimizer.py` - Core optimization logic (128 lines)
+- `optimizer.py` - Core optimization logic
 - `prompts.yaml` - System prompts for evaluation/analysis/refinement
 - `example_prompt.yaml` - Your prompts with iterative improvements
 - `test_data.json` - Input/output test cases

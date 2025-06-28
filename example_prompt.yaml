@@ -1,6 +1,11 @@
-initial_prompt: |
-  Classify the sentiment of the following text as positive, negative, or neutral.
-  
+initial_prompt: 'Classify the sentiment of the following text as positive, negative,
+  or neutral.
+
+
   Text: {{input}}
-  
+
+
   Classification:
+
+  '
+test_prompt: This is a test prompt with {{input}}

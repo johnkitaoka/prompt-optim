@@ -14,7 +14,6 @@ class PromptOptimizer:
         self.prompts_file = prompts_file
         self.prompts = self._load_prompts_data()
         
-
     def _load_prompts_data(self) -> Dict[str, Any]:
         with open(self.prompts_file, 'r') as f:
             return yaml.safe_load(f)
@@ -52,20 +51,9 @@ class PromptOptimizer:
         return ""
 
     def _save_prompt_to_yaml(self, prompt_name: str, prompt_content: str):
-        """Save a prompt to the YAML file with the given name."""
-        # Load current prompts
-        with open(self.prompts_file, 'r') as f:
-            data = yaml.safe_load(f)
-
-        # Add the new prompt
-        data[prompt_name] = prompt_content
-
-        # Save back to file
+        self.prompts[prompt_name] = prompt_content
         with open(self.prompts_file, 'w') as f:
-            yaml.dump(data, f, default_flow_style=False, indent=2)
-
-        # Update cached prompts
-        self.prompts = data
+            yaml.dump(self.prompts, f, default_flow_style=False, indent=2)
 
     def execute_prompt(self, prompt_name: str, test_input: str) -> str:
         prompt_template = Template(self.prompts[prompt_name])
@@ -94,8 +82,6 @@ class PromptOptimizer:
             else:
                 failures.append({"input": case["input"], "expected": case["expected_output"], "actual": response})
         return correct / len(test_data["test_cases"]), failures
-
-
 
     def optimize(self, test_data_path: str, initial_prompt_name: str = "initial_prompt", threshold: float = 0.85, max_iterations: int = 10) -> str:
         print(f"Starting prompt optimization...\nTarget accuracy: {threshold:.1%}\nMax iterations: {max_iterations}\n{'-' * 50}")

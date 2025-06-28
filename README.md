@@ -1,120 +1,55 @@
-# LLM Prompt Optimizer
+# LLM Prompt Optimizer (<150 Lines of Code)
 
-A Python-based tool that automatically improves prompts through iterative testing and refinement using the Anthropic Claude API.
+Automatically improves prompts through iterative testing and refinement using the Anthropic Claude API.
 
 ## 🚀 Features
 
 - **Automated Optimization**: Iteratively improves prompts using Claude's analysis
+- **YAML-Based**: All prompts stored in YAML with Jinja2 templating
+- **No File Logging**: Clean operation without operational logs
 - **Robust Error Handling**: Built-in retry logic for rate limits and API failures
-- **Progress Tracking**: Saves all iterations with scores and analysis to YAML
-- **Flexible Testing**: Support for any task with input-output test cases
-- **Jinja2 Templating**: Powerful templating system for clean prompt management
-- **CLI Interface**: Easy-to-use command-line interface
-- **Comprehensive Logging**: Detailed progress reporting and error messages
+- **CLI Interface**: Simple command-line interface
 
 ## 📋 Requirements
 
-- Python 3.7+
-- Anthropic API key
-- Dependencies: `anthropic`, `PyYAML`, `python-dotenv`, `jinja2`
+- Python 3.7+ • Anthropic API key • Dependencies: `anthropic`, `PyYAML`, `python-dotenv`, `jinja2`
 
 ## 🛠️ Setup
 
-1. **Install dependencies:**
 ```bash
 pip install -r requirements.txt
-```
-
-2. **Set up your Anthropic API key:**
-```bash
-cp .env.example .env
-# Edit .env and add your actual API key
-```
-
-Or set the environment variable directly:
-```bash
 export ANTHROPIC_API_KEY="your-api-key-here"
 ```
 
-## 🎯 Quick Start
+## 🎯 Usage
 
-1. **Basic usage:**
 ```bash
 python main.py \
   --test-data test_data.json \
   --initial-prompt-name "initial_prompt" \
-  --threshold 0.85 \
-  --max-iterations 10 \
   --prompts-file example_prompt.yaml
-```
-
-2. **Run tests (no API key required):**
-```bash
-python test_optimizer.py
-```
-
-3. **See examples and tips:**
-```bash
-python example_usage.py
 ```
 
 ## 📊 How It Works
 
-1. **Execution**: Apply current prompt to all test inputs
-2. **Evaluation**: Claude scores each response as correct/incorrect
-3. **Analysis**: Claude identifies specific prompt weaknesses
-4. **Refinement**: Claude rewrites the prompt based on analysis
-5. **Iteration**: Repeat until target accuracy or max iterations reached
+Execute → Evaluate → Analyze → Refine → Repeat until target accuracy reached
 
-## 📁 File Structure
+## 📁 Files
 
-```
-prompt-optim/
-├── main.py              # Main execution script
-├── optimizer.py         # PromptOptimizer class
-├── test_data.json       # Sample test cases (sentiment analysis)
-├── test_optimizer.py    # Test suite (no API key needed)
-├── example_usage.py     # Examples and usage guide
-├── prompts.yaml         # System prompts with Jinja2 templating
-├── example_prompt.yaml  # Example prompts with Jinja2 templating
-
-├── requirements.txt     # Python dependencies
-├── .env.example        # Environment variable template
-└── README.md          # This file
-```
-
-## 🔧 CLI Options
-
-```bash
-python main.py [OPTIONS]
-
-Required:
-  --test-data PATH          JSON file with test cases
-  --initial-prompt TEXT     Starting prompt to optimize
-
-Optional:
-  --threshold FLOAT         Target accuracy (0.0-1.0, default: 0.85)
-  --max-iterations INT      Maximum iterations (default: 10)
-  --api-key TEXT           Anthropic API key (or use env var)
-  --help                   Show help message
-```
+- `main.py` - CLI interface
+- `optimizer.py` - Core optimization logic (128 lines)
+- `prompts.yaml` - System prompts for evaluation/analysis/refinement
+- `example_prompt.yaml` - Your prompts with iterative improvements
+- `test_data.json` - Input/output test cases
 
 ## 📝 Test Data Format
 
-Create a JSON file with your test cases:
-
 ```json
 {
-  "task_description": "Brief description of the task",
+  "task_description": "Sentiment analysis",
   "test_cases": [
-    {
-      "input": "Input text for the prompt",
-      "expected_output": "Expected response"
-    },
-    {
-      "input": "Another input example",
-      "expected_output": "Another expected response"
-    }
+    {"input": "I love this!", "expected_output": "positive"},
+    {"input": "This is terrible", "expected_output": "negative"}
   ]
 }
 ```
@@ -122,166 +57,16 @@ Create a JSON file with your test cases:
 ## 📈 Example Output
 
 ```
-Starting prompt optimization...
-Target accuracy: 85.0%
-Max iterations: 10
---------------------------------------------------
-
-Iteration 1:
-Accuracy: 60.0% (4 failures)
-Analysis: Prompt lacks specificity about output format...
-Refining prompt...
-
-Iteration 2:
-Accuracy: 80.0% (2 failures)
-Analysis: Need better handling of edge cases...
-Refining prompt...
-
-Iteration 3:
-Accuracy: 90.0% (1 failures)
-
-✅ Target accuracy reached! Final score: 90.0%
+Iteration 1: Accuracy: 60.0% (4 failures)
+Iteration 2: Accuracy: 80.0% (2 failures)
+Iteration 3: Accuracy: 90.0% (1 failures)
+✅ Target accuracy reached!
 ```
 
-## 🎯 Optimization Tips
+## 🎯 Key Features
 
-1. **Start Simple**: Begin with basic prompts and let the optimizer improve them
-2. **Quality Test Data**: Include diverse examples and edge cases
-3. **Reasonable Targets**: Set achievable accuracy goals (80-90% is often good)
-4. **Monitor Progress**: Check `prompts.yaml` to see how prompts evolve
-5. **Task Clarity**: Ensure your task description is clear and specific
+- **Jinja2 Templating**: All prompts use `{{variable}}` syntax
+- **YAML Storage**: Iterative prompts saved as `prompt_1`, `prompt_2`, etc.
+- **No Logging**: Clean operation without operational log files
 
-## 🎨 Jinja2 Templating System
-
-The optimizer uses **Jinja2 templating** for clean, powerful prompt management:
-
-### Benefits:
-- **Clean Syntax**: `{{variable}}` instead of `{variable}`
-- **Multi-line Support**: YAML `|` preserves formatting
-- **No Escaping Issues**: Handles quotes and special characters gracefully
-- **Powerful Features**: Supports loops, conditionals, and filters
-- **Separation of Concerns**: Templates separate from data
-
-### Example Usage:
-```python
-from jinja2 import Template
-import yaml
-
-# Load prompts
-with open('prompts.yaml', 'r') as f:
-    prompts = yaml.safe_load(f)
-
-# Render a prompt
-template = Template(prompts['evaluation_prompt'])
-rendered = template.render(
-    task_description="Sentiment analysis",
-    expected="positive",
-    response="negative"
-)
-```
-
-
-
-## 📋 File Structure Details
-
-### prompts.yaml
-Contains only the system prompts used by the optimizer with Jinja2 templating:
-```yaml
-evaluation_prompt: |
-  Task: {{task_description}}
-
-  Expected output: {{expected}}
-  Actual output: {{response}}
-
-  Does the actual output correctly match the expected output for this task?
-  Respond with only "YES" or "NO".
-
-analysis_prompt: |
-  Current prompt: {{current_prompt}}
-
-  Failed test cases:
-  {{failure_examples}}
-
-  Analyze these failures and identify specific weaknesses in the prompt.
-  What improvements are needed? Be specific and concise.
-
-refinement_prompt: |
-  Task: {{task_description}}
-
-  Current prompt: {{current_prompt}}
-
-  Analysis of failures: {{analysis}}
-
-  Rewrite the prompt to address these issues. Make it more specific, clear, and effective.
-  Return only the improved prompt, nothing else.
-```
-
-### example_prompt.yaml
-Sample prompts with Jinja2 templating:
-```yaml
-initial_prompt: |
-  Classify the sentiment of the following text as positive, negative, or neutral.
-
-  Text: {{input}}
-
-  Classification:
-```
-
-During optimization, refined prompts are automatically saved as:
-- `prompt_1`: First iteration refinement
-- `prompt_2`: Second iteration refinement
-- etc.
-
-
-
-## 🔍 Understanding Results
-
-- **Accuracy Score**: Percentage of test cases that passed
-- **Analysis**: Claude's assessment of prompt weaknesses
-- **Prompt Evolution**: Each iteration creates a new prompt (prompt_1, prompt_2, etc.) in the YAML file
-
-## 🚨 Error Handling
-
-The optimizer includes robust error handling for:
-- **Rate Limits**: Automatic retry with exponential backoff
-- **API Failures**: Connection errors and server issues
-- **Invalid Responses**: Malformed API responses
-- **File Errors**: Missing or corrupted test data files
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Add tests for new functionality
-4. Ensure all tests pass: `python test_optimizer.py`
-5. Submit a pull request
-
-## 📄 License
-
-MIT License - see LICENSE file for details
-
-## 🆘 Troubleshooting
-
-**API Key Issues:**
-```bash
-# Check if API key is set
-echo $ANTHROPIC_API_KEY
-
-# Set API key for current session
-export ANTHROPIC_API_KEY="your-key-here"
-```
-
-**Rate Limit Errors:**
-- The optimizer automatically handles rate limits with exponential backoff
-- Consider reducing the number of test cases for faster iteration
-
-**Low Accuracy:**
-- Ensure test data quality and consistency
-- Try starting with a more specific initial prompt
-- Increase max iterations if needed
-
-**Import Errors:**
-```bash
-# Reinstall dependencies
-pip install -r requirements.txt --force-reinstall
-```
+That's it! The optimizer automatically saves refined prompts as `prompt_1`, `prompt_2`, etc. in your YAML file.

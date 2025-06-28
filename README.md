@@ -27,18 +27,18 @@ An example prompt file (`example_prompt.yaml`) and test data (`test_data.json`) 
 
 ```bash
 python main.py \
-  --test-data test_data.json \
+  --test-data examples/test_data.json \
   --initial-prompt-name "initial_prompt" \
-  --prompts-file example_prompt.yaml
+  --prompts-file examples/example_prompt.yaml
 ```
 
 To customize the target accuracy and max iterations:
 
 ```bash
 python main.py \
-  --test-data test_data.json \
+  --test-data examples/test_data.json \
   --initial-prompt-name "initial_prompt" \
-  --prompts-file example_prompt.yaml \
+  --prompts-file examples/example_prompt.yaml \
   --threshold 0.95 \
   --max-iterations 15
 ```
@@ -48,13 +48,17 @@ python main.py \
 
 Execute → Evaluate → Analyze → Refine → Repeat until target accuracy reached
 
-## 📁 Files
+## 📁 Structure
 
-- `main.py` - CLI interface
-- `optimizer.py` - Core optimization logic
-- `prompts.yaml` - System prompts for evaluation/analysis/refinement
-- `example_prompt.yaml` - Your prompts with iterative improvements
-- `test_data.json` - Input/output test cases
+```
+prompt-optim/
+├── optimizer.py           # Core optimization logic (<105 lines)
+├── main.py               # CLI interface
+└── examples/             # Example prompts, configs, and test data
+    ├── prompts.yaml      # System prompts for evaluation/analysis
+    ├── example_prompt.yaml # Your prompts with iterations
+    └── test_data.json    # Input/output test cases
+```
 
 ## 📝 Test Data Format
 

@@ -42,9 +42,10 @@ export ANTHROPIC_API_KEY="your-api-key-here"
 ```bash
 python main.py \
   --test-data test_data.json \
-  --initial-prompt "Classify the sentiment of this text" \
+  --initial-prompt-name "initial_prompt" \
   --threshold 0.85 \
-  --max-iterations 10
+  --max-iterations 10 \
+  --prompts-file example_prompt.yaml
 ```
 
 2. **Run tests (no API key required):**
@@ -75,7 +76,7 @@ prompt-optim/
 ├── test_optimizer.py    # Test suite (no API key needed)
 ├── example_usage.py     # Examples and usage guide
 ├── prompts.yaml         # System prompts with Jinja2 templating
-├── example_prompt.txt   # Example prompt to optimize
+├── example_prompt.yaml  # Example prompts with Jinja2 templating
 
 ├── requirements.txt     # Python dependencies
 ├── .env.example        # Environment variable template
@@ -215,28 +216,29 @@ refinement_prompt: |
   Return only the improved prompt, nothing else.
 ```
 
-### example_prompt.txt
-Sample prompt to optimize:
-```
-Classify the sentiment of the following text as positive, negative, or neutral.
+### example_prompt.yaml
+Sample prompts with Jinja2 templating:
+```yaml
+initial_prompt: |
+  Classify the sentiment of the following text as positive, negative, or neutral.
+
+  Text: {{input}}
+
+  Classification:
 ```
 
-### prompts_optimization_log.yaml (Generated)
-Contains the complete optimization history:
-```yaml
-iterations:
-  - iteration: 1
-    timestamp: "2025-06-27T22:44:51"
-    prompt: "Original prompt"
-    accuracy_score: 0.6
-    analysis: "Needs improvement..."
-```
+During optimization, refined prompts are automatically saved as:
+- `prompt_1`: First iteration refinement
+- `prompt_2`: Second iteration refinement
+- etc.
+
+
 
 ## 🔍 Understanding Results
 
 - **Accuracy Score**: Percentage of test cases that passed
 - **Analysis**: Claude's assessment of prompt weaknesses
-- **Iterations**: Each refinement attempt with timestamp
+- **Prompt Evolution**: Each iteration creates a new prompt (prompt_1, prompt_2, etc.) in the YAML file
 
 ## 🚨 Error Handling
 

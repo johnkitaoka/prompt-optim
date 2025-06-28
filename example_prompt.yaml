@@ -1,0 +1,6 @@
+initial_prompt: |
+  Classify the sentiment of the following text as positive, negative, or neutral.
+  
+  Text: {{input}}
+  
+  Classification:

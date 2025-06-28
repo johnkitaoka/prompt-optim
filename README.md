@@ -8,6 +8,7 @@ A Python-based tool that automatically improves prompts through iterative testin
 - **Robust Error Handling**: Built-in retry logic for rate limits and API failures
 - **Progress Tracking**: Saves all iterations with scores and analysis to YAML
 - **Flexible Testing**: Support for any task with input-output test cases
+- **Jinja2 Templating**: Powerful templating system for clean prompt management
 - **CLI Interface**: Easy-to-use command-line interface
 - **Comprehensive Logging**: Detailed progress reporting and error messages
 
@@ -15,7 +16,7 @@ A Python-based tool that automatically improves prompts through iterative testin
 
 - Python 3.7+
 - Anthropic API key
-- Dependencies: `anthropic`, `PyYAML`, `python-dotenv`
+- Dependencies: `anthropic`, `PyYAML`, `python-dotenv`, `jinja2`
 
 ## 🛠️ Setup
 
@@ -73,7 +74,9 @@ prompt-optim/
 ├── test_data.json       # Sample test cases (sentiment analysis)
 ├── test_optimizer.py    # Test suite (no API key needed)
 ├── example_usage.py     # Examples and usage guide
-├── prompts.yaml         # Generated: all prompts and optimization history
+├── prompts.yaml         # System prompts with Jinja2 templating
+├── example_prompt.txt   # Example prompt to optimize
+
 ├── requirements.txt     # Python dependencies
 ├── .env.example        # Environment variable template
 └── README.md          # This file
@@ -147,9 +150,90 @@ Accuracy: 90.0% (1 failures)
 4. **Monitor Progress**: Check `prompts.yaml` to see how prompts evolve
 5. **Task Clarity**: Ensure your task description is clear and specific
 
+## 🎨 Jinja2 Templating System
+
+The optimizer uses **Jinja2 templating** for clean, powerful prompt management:
+
+### Benefits:
+- **Clean Syntax**: `{{variable}}` instead of `{variable}`
+- **Multi-line Support**: YAML `|` preserves formatting
+- **No Escaping Issues**: Handles quotes and special characters gracefully
+- **Powerful Features**: Supports loops, conditionals, and filters
+- **Separation of Concerns**: Templates separate from data
+
+### Example Usage:
+```python
+from jinja2 import Template
+import yaml
+
+# Load prompts
+with open('prompts.yaml', 'r') as f:
+    prompts = yaml.safe_load(f)
+
+# Render a prompt
+template = Template(prompts['evaluation_prompt'])
+rendered = template.render(
+    task_description="Sentiment analysis",
+    expected="positive",
+    response="negative"
+)
+```
+
+
+
+## 📋 File Structure Details
+
+### prompts.yaml
+Contains only the system prompts used by the optimizer with Jinja2 templating:
+```yaml
+evaluation_prompt: |
+  Task: {{task_description}}
+
+  Expected output: {{expected}}
+  Actual output: {{response}}
+
+  Does the actual output correctly match the expected output for this task?
+  Respond with only "YES" or "NO".
+
+analysis_prompt: |
+  Current prompt: {{current_prompt}}
+
+  Failed test cases:
+  {{failure_examples}}
+
+  Analyze these failures and identify specific weaknesses in the prompt.
+  What improvements are needed? Be specific and concise.
+
+refinement_prompt: |
+  Task: {{task_description}}
+
+  Current prompt: {{current_prompt}}
+
+  Analysis of failures: {{analysis}}
+
+  Rewrite the prompt to address these issues. Make it more specific, clear, and effective.
+  Return only the improved prompt, nothing else.
+```
+
+### example_prompt.txt
+Sample prompt to optimize:
+```
+Classify the sentiment of the following text as positive, negative, or neutral.
+```
+
+### prompts_optimization_log.yaml (Generated)
+Contains the complete optimization history:
+```yaml
+iterations:
+  - iteration: 1
+    timestamp: "2025-06-27T22:44:51"
+    prompt: "Original prompt"
+    accuracy_score: 0.6
+    analysis: "Needs improvement..."
+```
+
 ## 🔍 Understanding Results
 
-- **prompts.yaml**: Contains complete optimization history
 - **Accuracy Score**: Percentage of test cases that passed
 - **Analysis**: Claude's assessment of prompt weaknesses
 - **Iterations**: Each refinement attempt with timestamp

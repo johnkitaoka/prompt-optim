@@ -34,7 +34,9 @@ def main():
     print("-" * 50)
     print(optimized_prompt)
     print("-" * 50)
-    print(f"Results saved to {args.prompts_file}")
+    log_file = args.prompts_file.replace('.yaml', '_optimization_log.yaml')
+    print(f"System prompts: {args.prompts_file}")
+    print(f"Optimization log: {log_file}")
 
 
 if __name__ == "__main__":

@@ -1,11 +1,27 @@
-iterations:
-- accuracy_score: 0.5
-  analysis: Need to handle negative sentiment better
-  iteration: 1
-  prompt: Classify the sentiment
-  timestamp: '2025-06-27T22:38:14.931372'
-- accuracy_score: 1.0
-  analysis: ''
-  iteration: 2
-  prompt: Improved prompt for sentiment analysis
-  timestamp: '2025-06-27T22:38:14.931832'
+evaluation_prompt: |
+  Task: {{task_description}}
+
+  Expected output: {{expected}}
+  Actual output: {{response}}
+
+  Does the actual output correctly match the expected output for this task?
+  Respond with only "YES" or "NO".
+
+analysis_prompt: |
+  Current prompt: {{current_prompt}}
+
+  Failed test cases:
+  {{failure_examples}}
+
+  Analyze these failures and identify specific weaknesses in the prompt.
+  What improvements are needed? Be specific and concise.
+
+refinement_prompt: |
+  Task: {{task_description}}
+
+  Current prompt: {{current_prompt}}
+
+  Analysis of failures: {{analysis}}
+
+  Rewrite the prompt to address these issues. Make it more specific, clear, and effective.
+  Return only the improved prompt, nothing else.

@@ -23,12 +23,26 @@ export ANTHROPIC_API_KEY="your-api-key-here"
 
 ## 🎯 Usage
 
+An example prompt file (`example_prompt.yaml`) and test data (`test_data.json`) are provided. To run with default settings:
+
 ```bash
 python main.py \
   --test-data test_data.json \
   --initial-prompt-name "initial_prompt" \
   --prompts-file example_prompt.yaml
 ```
+
+To customize the target accuracy and max iterations:
+
+```bash
+python main.py \
+  --test-data test_data.json \
+  --initial-prompt-name "initial_prompt" \
+  --prompts-file example_prompt.yaml \
+  --threshold 0.95 \
+  --max-iterations 15
+```
+
 
 ## 📊 How It Works
 
@@ -63,10 +77,3 @@ Iteration 3: Accuracy: 90.0% (1 failures)
 ✅ Target accuracy reached!
 ```
 
-## 🎯 Key Features
-
-- **Jinja2 Templating**: All prompts use `{{variable}}` syntax
-- **YAML Storage**: Iterative prompts saved as `prompt_1`, `prompt_2`, etc.
-- **No Logging**: Clean operation without operational log files
-
-That's it! The optimizer automatically saves refined prompts as `prompt_1`, `prompt_2`, etc. in your YAML file.

@@ -1,27 +1,93 @@
 evaluation_prompt: |
-  Task: {{task_description}}
+  You are tasked with comparing an expected output to an actual output for a given task. Your job is to determine if the actual output correctly matches the expected output. Follow these steps:
 
-  Expected output: {{expected}}
-  Actual output: {{response}}
+  1. Review the task description:
+  <task_description>
+  {{task_description}}
+  </task_description>
 
-  Does the actual output correctly match the expected output for this task?
-  Respond with only "YES" or "NO".
+  2. Examine the expected output:
+  <expected_output>
+  {{expected}}
+  </expected_output>
+
+  3. Examine the actual output:
+  <actual_output>
+  {{response}}
+  </actual_output>
+
+  4. Compare the expected output and the actual output. Consider the following:
+    - Do they convey the same information?
+    - Are they formatted similarly?
+    - Do they meet the requirements specified in the task description?
+
+  5. Based on your comparison, determine if the actual output correctly matches the expected output for this task.
+
+  6. Respond with only "YES" if the actual output correctly matches the expected output, or "NO" if it does not. Do not include any other text, explanation, or justification in your response.
+  
+  
 
 analysis_prompt: |
-  Current prompt: {{current_prompt}}
+  You are an AI prompt engineering expert tasked with analyzing and improving a given prompt based on its failure cases. Your goal is to identify specific weaknesses in the prompt and suggest concrete improvements to address these issues.
 
-  Failed test cases:
+  Here is the current prompt you need to analyze:
+  <current_prompt>
+  {{current_prompt}}
+  </current_prompt>
+
+  The prompt has failed in the following test cases:
+  <failure_examples>
   {{failure_examples}}
+  </failure_examples>
 
-  Analyze these failures and identify specific weaknesses in the prompt.
-  What improvements are needed? Be specific and concise.
+  Carefully analyze these failure examples and the current prompt. Identify specific weaknesses or shortcomings in the prompt that may have led to these failures. Consider aspects such as:
+
+  1. Clarity of instructions
+  2. Specificity of guidelines
+  3. Handling of edge cases
+  4. Potential ambiguities or misinterpretations
+  5. Missing crucial information or context
+
+  Based on your analysis, develop specific and concise suggestions for improving the prompt. Your suggestions should directly address the identified weaknesses and aim to prevent similar failures in the future.
+
+  Present your analysis and improvement suggestions in the following format:
+
+  <analysis>
+  Provide a concise analysis of the prompt's weaknesses, referencing specific parts of the failure examples to support your points.
+  </analysis>
+
+  <improvements>
+  List specific, actionable improvements to the prompt. Each suggestion should be clear, concise, and directly related to addressing an identified weakness.
+  </improvements>
+
+  Ensure that your analysis and suggestions are thorough yet concise, focusing on the most critical issues and impactful improvements.
 
 refinement_prompt: |
-  Task: {{task_description}}
+  You are an AI prompt engineer tasked with improving an existing prompt based on an analysis of its failures. Your goal is to rewrite the prompt to make it more specific, clear, and effective. Follow these steps:
 
-  Current prompt: {{current_prompt}}
+  1. Review the task description:
+  <task_description>
+  {{task_description}}
+  </task_description>
 
-  Analysis of failures: {{analysis}}
+  2. Examine the current prompt:
+  <current_prompt>
+  {{current_prompt}}
+  </current_prompt>
 
-  Rewrite the prompt to address these issues. Make it more specific, clear, and effective.
-  Return only the improved prompt, nothing else.
+  3. Carefully consider the analysis of failures:
+  <analysis>
+  {{analysis}}
+  </analysis>
+
+  4. Rewrite the prompt to address the issues identified in the analysis. When rewriting, focus on:
+    - Making instructions more specific and clear
+    - Addressing any ambiguities or misunderstandings
+    - Providing better examples or context if needed
+    - Ensuring the prompt aligns with the task description
+    - Incorporating any missing elements or requirements
+    - Removing any unnecessary or confusing parts
+
+  5. Output your improved prompt. Do not include any explanations, comments, or additional text. The output should contain only the rewritten prompt itself.
+
+  Remember to make the prompt more effective in achieving the desired outcome based on the task description and the analysis of failures.
